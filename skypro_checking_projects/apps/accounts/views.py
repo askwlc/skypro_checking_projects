@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
 

@@ -1,8 +1,9 @@
-from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from .models import FileUpload
+from django.views.generic.edit import CreateView
+
 from .forms import FileUploadForm
-from .utils import check_file_flake8
+from .models import FileUpload
+from .tasks import check_files
 
 
 class FileUploadView(CreateView):
@@ -15,7 +16,6 @@ class FileUploadView(CreateView):
     def form_valid(self, form):
         """Переопределение метода для проверки файла после загрузки."""
         response = super().form_valid(form)
-        file_path = self.object.file.path
-        check_result = check_file_flake8(file_path)
+        check_files.delay(self.object.id)
 
         return response

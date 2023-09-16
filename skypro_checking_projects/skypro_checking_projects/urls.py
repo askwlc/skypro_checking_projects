@@ -1,8 +1,7 @@
+from apps.accounts.views import CustomLoginView, CustomLogoutView, register
+from apps.files.views import FileUploadView
 from django.contrib import admin
 from django.urls import path
-
-from apps.accounts.views import register, CustomLoginView, CustomLogoutView
-from apps.files.views import FileUploadView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
