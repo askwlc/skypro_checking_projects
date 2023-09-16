@@ -12,6 +12,6 @@ def registration(request: HttpRequest) -> HttpResponse:
             user = form.save()
             login(request, user)
             return redirect('files_list')
-        else:
-            form = UserCreationForm()
-        return render(request, 'registration.html', {'form': form})
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration.html', {'form': form})
