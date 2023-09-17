@@ -11,6 +11,6 @@ def check_files(file_id: int):
     check_result = check_file_flake8(uploaded_file.file.path)
     FileCheckLogs.objects.create(
         file=uploaded_file,
-        check_result=check_result,
+        result=check_result,
         status='completed' if check_result == '' else 'error'
     )

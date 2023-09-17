@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Загруженные файлы и их проверки</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Upload Time</th>
+                <th>Last Check Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.file.name }}</td>
+                <td>{{ file.upload_time }}</td>
+                <td>{{ file.check_time }}</td>
+                <td>{{ file.logs.last.status if file.logs.last else "Not checked" }}</td>
+                <td>
+                    {% if file.logs.last %}
+                        {{ file.logs.last.status }}
+                    {% else %}
+                        Not checked
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
