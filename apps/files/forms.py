@@ -10,8 +10,8 @@ class FileUploadForm(forms.ModelForm):
         model = FileUpload
         fields = ['file']
 
-    def check_extension(self):
+    def clean_file(self):
         file = self.cleaned_data.get("file")
         if not file.name.endswith('.py'):
-            raise forms.ValidationError('Only .py files are allowed.')
+            raise forms.ValidationError('Возможна загрузка только .py файлов')
         return file

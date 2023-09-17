@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -33,3 +33,18 @@ class FilesListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """Отображение файлов загруженных текущим пользователем."""
         return FileUpload.objects.filter(user=self.request.user).order_by('-upload_time')
+
+
+class FileDeleteView(DeleteView):
+    model = FileUpload
+    success_url = reverse_lazy('files_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+
+class FileUpdateView(UpdateView):
+    model = FileUpload
+    form_class = FileUploadForm
+    template_name = 'upload.html'  # reusing the upload template
+    success_url = reverse_lazy('files_list')

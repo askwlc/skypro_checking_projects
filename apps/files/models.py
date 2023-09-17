@@ -1,14 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class FileUpload(models.Model):
     """Модель загруженного файла, с полями датами загрузки и проверки, было ли редактирование."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='files/')
+    file = models.FileField(upload_to='uploads/')
     upload_time = models.DateTimeField(auto_now_add=True)
     is_new = models.BooleanField(default=True)
     check_time = models.DateTimeField(null=True, blank=True)
+
 
     def __str__(self):
         return self.file.name
@@ -30,3 +33,8 @@ class FileCheckLogs(models.Model):
 
     def __str__(self):
         return self.file
+
+
+@receiver(post_delete, sender=FileUpload)
+def submission_delete(sender, instance, **kwargs):
+    instance.file.delete(False)

@@ -2,8 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from celery import Celery
 
 import os
-
-from django.conf import settings
+import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skypro_checking_projects.settings')
 
@@ -14,3 +13,6 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
