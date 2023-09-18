@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.db import IntegrityError
 import uuid
 from decouple import config
@@ -36,7 +36,6 @@ def register(request: HttpRequest) -> HttpResponse:
                 user.username = user.email
                 user.save()
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                send_confirmation_mail(user)
                 return redirect('files_list')
             except IntegrityError:
                 messages.error(request, 'Вы уже зарегистрированы.')
@@ -52,8 +51,7 @@ def send_confirmation_mail(user):
     EmailConfirmation.objects.create(user=user, confirmation_code=code)
 
     subject = 'Подтвердите адрес электронной почты.'
-    confirmation_url = reverse('confirm_email', args=[code])
-    message = f'Пожалуйста перейдите по ссылке для подтверждения адреса электронной почты:\n\nhttp://yourdomain.com{confirmation_url}'
+    message = f'Пожалуйста перейдите по ссылке для подтверждения адреса электронной почты:\n\nhttp://yourdomain.com{EmailConfirmation(user=user).get_absolute_url()}'
     from_email = config('DEFAULT_FROM_EMAIL')
 
     send_mail(subject, message, from_email, [user.email], fail_silently=False)

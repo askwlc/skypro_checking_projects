@@ -12,17 +12,9 @@ class FileUpload(models.Model):
     is_new = models.BooleanField(default=True)
     check_time = models.DateTimeField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        """Проверка замены файла."""
-        if self.pk:
-            orig = FileUpload.objects.get(pk=self.pk)
-            if orig.file != self.file:
-                self.is_new = True
-        super().save(*args, **kwargs)
-
 
     def __str__(self):
-        return str(self.file.name)
+        return self.file.name
 
 
 class FileCheckLogs(models.Model):
@@ -40,7 +32,7 @@ class FileCheckLogs(models.Model):
     notification_sent = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.file)
+        return self.file
 
 
 @receiver(post_delete, sender=FileUpload)

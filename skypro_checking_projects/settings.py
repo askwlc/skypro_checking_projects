@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-
+from datetime import timedelta
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +9,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -101,12 +101,20 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = config('CELERY_BROKER_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+CELERY_IMPORTS = ('skypro_checking_projects.tasks',)
+CELERY_BEAT_SCHEDULE = {
+    'check_new_files': {
+        'task': 'skypro_checking_projects.tasks.check_file_flake8_task',
+        'schedule': timedelta(seconds=30),
+        'args': ()
+    },
+}
 
 CACHES = {
     "default": {

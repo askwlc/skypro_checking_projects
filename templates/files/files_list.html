@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Загруженные файлы и их проверки</h2>
+        <a href="{% url 'file_upload' %}" class="btn btn-primary">Загрузить новый файл</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя файла</th>
+                <th>Дата загрузки</th>
+                <th>Последняя проверка</th>
+                <th>Статус</th>
+                <th>Отправка отчета</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td style="vertical-align: middle;">{{ file.file.name }}</td>
+                <td style="vertical-align: middle;">{{ file.upload_time }}</td>
+                <td style="vertical-align: middle;">{{ file.check_time }}</td>
+                <td style="vertical-align: middle;">
+                    {% if file.logs.last %}
+                        {{ file.logs.last.status }}
+                    {% else %}
+                        Не проверен
+                    {% endif %}
+                </td>
+                <td style="vertical-align: middle;">
+                    {% if file.logs.last %}
+                        {% if file.logs.last.notification_sent %}
+                            <span class="report-sent">Отчет отправлен</span>
+                        {% else %}
+                            <span class="report-not-sent">Отчет не отправлен</span>
+                        {% endif %}
+                    {% else %}
+                        Нет результата
+                    {% endif %}
+                </td>
+                <td style="vertical-align: middle;">
+                    <div style="margin-bottom: 5px;">
+                        <a href="{% url 'file_results' file.id %}" class="btn btn-sm btn-info">Результаты</a>
+                    </div>
+                    <div style="margin-bottom: 5px;">
+                        <a href="{% url 'file_update' file.id %}" class="btn btn-sm btn-warning">Заменить</a>
+                    </div>
+                    <a href="{% url 'file_delete' file.id %}" class="btn btn-sm btn-danger">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

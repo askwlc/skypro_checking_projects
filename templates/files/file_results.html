@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Результаты проверки для {{ file.file.name }}</h2>
+    <p>Дата загрузки: {{ file.upload_time }}</p>
+    <p>Дата последней проверки: {{ file.check_time }}</p>
+    <h4>Статус: </h4>
+    {% if file.logs.last %}
+        <p>{{ file.logs.last.status }}</p>
+    {% else %}
+        <p>Не проверен</p>
+    {% endif %}
+    <h4>Результат: </h4>
+    {% if file.logs.last %}
+        <p>{{ file.logs.last.result }}</p>
+    {% else %}
+        <p>Нет результата</p>
+    {% endif %}
+    <h4>Отправка отчета:</h4>
+    {% if file.logs.last %}
+        {% if file.logs.last.notification_sent %}
+            <p>Отчет отправлен</p>
+        {% else %}
+            <p>Отчет не отправлен</p>
+        {% endif %}
+    {% else %}
+        <p>Нет результата</p>
+    {% endif %}
+    <a href="{% url 'files_list' %}" class="btn btn-primary">Назад к списку файлов</a>
+</div>
+{% endblock %}
