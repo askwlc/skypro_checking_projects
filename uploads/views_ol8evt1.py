@@ -64,9 +64,9 @@ def confirm_email(request, confirmation_code):
         if not email_confirm.confirmed:
             email_confirm.confirmed = True
             email_confirm.save()
-            return render(request, 'confirmation_successful.html')
+            return render(request, 'email/confirmation_successful.html')
         else:
             return render(request,
-                          'confirmation_already_done.html')
+                          'email/confirmation_already_done.html')
     except EmailConfirmation.DoesNotExist:
-        return render(request, 'confirmation_error.html')
+        return render(request, 'email/confirmation_error.html')

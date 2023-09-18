@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+import logging
+
+logger = logging.getLogger('apps')
 
 
 class FileUpload(models.Model):
@@ -14,12 +17,14 @@ class FileUpload(models.Model):
 
     def save(self, *args, **kwargs):
         """Проверка замены файла."""
-        if self.pk:
-            orig = FileUpload.objects.get(pk=self.pk)
-            if orig.file != self.file:
+        if not self.pk:
+            self.is_new = True
+        else:
+            old_file = FileUpload.objects.get(pk=self.pk).file
+            if old_file and self.file and old_file.url != self.file.url:
                 self.is_new = True
+                logger.info(f"Файл {self.file.name} распознан как новый или заменен.")
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return str(self.file.name)

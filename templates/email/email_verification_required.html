@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Необходима верификация электронной почты.</h1>
+    <p>Пожалуйста верифицируйте ваш email, для загрузки нового файла.</p>
+
+    <form method="post" action="{% url 'resend_verification' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Отправить ссылку на почту.</button>
+    </form>
+</div>
+{% endblock %}

@@ -13,9 +13,13 @@
     {% endif %}
     <h4>Результат: </h4>
     {% if file.logs.last %}
-        <p>{{ file.logs.last.result }}</p>
+        {% if file.logs.last.result %}
+            <p>{{ file.logs.last.result }}</p>
+        {% else %}
+            <p>Ошибок не найдено</p>
+        {% endif %}
     {% else %}
-        <p>Нет результата</p>
+        <p>Файл еще не проверен</p>
     {% endif %}
     <h4>Отправка отчета:</h4>
     {% if file.logs.last %}
