@@ -3,7 +3,8 @@ from celery import Celery
 from django.conf import settings
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skypro_checking_projects.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'skypro_checking_projects.settings')
 django.setup()
 app = Celery('skypro_checking_projects')
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from ..files.models import FileUpload, FileCheckLogs
+
+from ..files.models import FileCheckLogs, FileUpload
 
 
 class FileCheckLogsSerializer(serializers.ModelSerializer):

@@ -1,15 +1,18 @@
+import uuid
+
+from decouple import config
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib import messages
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy, reverse
-from django.db import IntegrityError
-import uuid
-from decouple import config
+from django.urls import reverse, reverse_lazy
 
-from apps.accounts.forms import CustomUserCreationForm, CustomAuthenticationForm
+from apps.accounts.forms import (CustomAuthenticationForm,
+                                 CustomUserCreationForm)
+
 from .models import EmailConfirmation
 
 
@@ -35,7 +38,8 @@ def register(request: HttpRequest) -> HttpResponse:
                 user = form.save(commit=False)
                 user.username = user.email
                 user.save()
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user,
+                      backend='django.contrib.auth.backends.ModelBackend')
                 send_confirmation_mail(user, request)
                 return redirect('files_list')
             except IntegrityError:
@@ -54,7 +58,8 @@ def send_confirmation_mail(user, request):
     subject = 'Подтвердите адрес электронной почты.'
     confirmation_url = reverse('confirm_email', args=[code])
     domain = request.get_host()
-    message = f'Пожалуйста перейдите по ссылке для подтверждения адреса электронной почты:\n\nhttp://{domain}{confirmation_url}'
+    message = f'Пожалуйста перейдите по ссылке для подтверждения адреса ' \
+              f'электронной почты:\n\nhttp://{domain}{confirmation_url}'
     from_email = config('DEFAULT_FROM_EMAIL')
 
     send_mail(subject, message, from_email, [user.email], fail_silently=False)
@@ -69,7 +74,9 @@ def resend_verification_email(request):
 def confirm_email(request, confirmation_code):
     """Подтверждение эл.почты по ссылке в письме клиента."""
     try:
-        email_confirm = EmailConfirmation.objects.get(confirmation_code=confirmation_code)
+        email_confirm = EmailConfirmation.objects.get(
+            confirmation_code=confirmation_code
+        )
         if not email_confirm.confirmed:
             email_confirm.confirmed = True
             email_confirm.save()

@@ -1,8 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from ..files.models import FileUpload
-from .serializers import FileUploadSerializer, FileUploadDetailSerializer
+
 from apps.files.tasks import check_file_flake8_task
+
+from ..files.models import FileUpload
+from .serializers import FileUploadDetailSerializer, FileUploadSerializer
 
 
 class FileListCreateView(generics.ListCreateAPIView):
@@ -29,4 +31,5 @@ class FileRetrieveRecheckView(generics.RetrieveAPIView):
         file.save()
         check_file_flake8_task.delay()
 
-        return Response({"result": "ok", "message": "file under testing"}, status=status.HTTP_200_OK)
+        return Response({"result": "ok", "message": "file under testing"},
+                        status=status.HTTP_200_OK)
