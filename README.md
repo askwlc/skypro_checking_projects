@@ -3,8 +3,6 @@
 Также в нем представлен API-уровень для облегчения работы партнерских компаний.
 Для управления очередью используются Celery, Redis и Celery Beat для выполнения периодических задач.
 
-<!-- Проект доступен по [адресу](http://51.250.80.143/recipes) -->
-
 
 ### Стек технологий использованный в проекте:
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=ffffff&color=043A6B)](https://www.python.org/)

@@ -1,4 +1,5 @@
 import logging
+import traceback
 import subprocess
 from datetime import datetime
 from subprocess import CompletedProcess
@@ -60,12 +61,18 @@ def update_file_upload(file_upload: FileUpload) -> None:
     file_upload.save()
 
 
-def send_notification_email(file_upload: FileUpload, log: FileCheckLogs,
-                            result: CompletedProcess) -> None:
+import traceback
+
+
+def send_notification_email(file_upload: FileUpload, log: FileCheckLogs, result: CompletedProcess) -> None:
     """Отправка сообщения о результатах проверки."""
+    logger.info("Начало отправки уведомления по электронной почте.")
+
     email_count, email_timestamp = get_email_cache_data()
+    logger.info(f"Количество отправленных сообщений: {email_count}")
 
     if email_count >= 50:
+        logger.warning("Превышен лимит отправки сообщений (50).")
         return
 
     subject = 'Результаты проверки файла по flake8.'
@@ -73,13 +80,15 @@ def send_notification_email(file_upload: FileUpload, log: FileCheckLogs,
     from_email = config('DEFAULT_FROM_EMAIL')
 
     try:
-        send_mail(subject, message, from_email,
-                  [file_upload.user.email], fail_silently=False)
+        send_mail(subject, message, from_email, [file_upload.user.email], fail_silently=False)
+        logger.info("Уведомление по электронной почте успешно отправлено.")
+
         log.notification_sent = True
         log.save()
         update_email_cache(email_count, email_timestamp)
     except Exception as e:
         logger.error(f"Ошибка при отправке сообщения: {e}")
+        logger.error(traceback.format_exc())
 
 
 def get_email_cache_data() -> Tuple[int, Optional[datetime]]:
