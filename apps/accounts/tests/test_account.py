@@ -1,7 +1,8 @@
 import pytest
-from django.urls import reverse
-from apps.accounts.models import EmailConfirmation
 from django.contrib.auth.models import User
+from django.urls import reverse
+
+from apps.accounts.models import EmailConfirmation
 
 
 @pytest.fixture

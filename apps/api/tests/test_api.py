@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.files.models import FileUpload
 
@@ -13,7 +12,8 @@ class TestFileViews:
 
     def setup(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='testpass')
 
     def test_file_list_view(self):
         """Тест отображения списка файлов."""

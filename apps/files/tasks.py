@@ -105,3 +105,23 @@ def update_email_cache(email_count: int,
     cache.set('email_count', email_count + 1, 3600)
     if not email_timestamp:
         cache.set('email_timestamp', current_time, 3600)
+
+
+# def my_cron_job():
+"""
+Задание со звездочкой в техническом задании.
+Другой вариант создания периодических заданий.
+Перечислить другие варианты:
+RQ (Redis Queue)
+APScheduler
+Django Q
+django-cron
+django-background-tasks
+"""
+#     with open('cron_log.txt', 'a') as f:
+#         f.write(f"Cron job executed at {datetime.now()}\n")
+
+# def handle(self, *args, **kwargs):
+#     check_file_flake8_task()
+#     my_cron_job()
+#     self.stdout.write(self.style.SUCCESS('Successfully'))

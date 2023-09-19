@@ -15,3 +15,12 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomAuthenticationForm(AuthenticationForm):
     """Форма входа в систему с использованием почты."""
     username = forms.EmailField(label="Email")
+
+    def clean_username(self):
+        """Проверка зарегистрирован ли email."""
+        email = self.cleaned_data.get('username')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Вводимый email не зарегистрирован, "
+                                        "пожалуйста зарегистрируйтесь.")
+
+        return email
