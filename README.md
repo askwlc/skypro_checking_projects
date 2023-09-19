@@ -5,6 +5,7 @@
 
 <!-- Проект доступен по [адресу](http://51.250.80.143/recipes) -->
 
+
 ### Стек технологий использованный в проекте:
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=ffffff&color=043A6B)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat&logo=Django&logoColor=ffffff&color=043A6B)](https://www.djangoproject.com/)
@@ -49,6 +50,13 @@ git clone git@github.com:askwlc/skypro_checking_projects.git
 ```
 docker-compose up --build -d
 ```
+
+После успешной сборки выполнить миграции:
+
+```
+sudo docker compose exec backend python manage.py migrate
+```
+
 
 Доступ к веб-интерфейсу:
 
